@@ -24,10 +24,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from expenses.views import ExpenseViewSet
+from expenses.views import ExpenseViewSet, TripViewSet
 
 router = DefaultRouter()
 router.register(r'expenses', ExpenseViewSet)
+router.register(r'trips', TripViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

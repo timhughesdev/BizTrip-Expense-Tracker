@@ -3,6 +3,8 @@ import axios from 'axios';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
 import Modal from './components/Modal';
+import TripForm from './components/TripForm';
+import TripSelector from './components/TripSelector';
 import './App.css';
 
 interface Expense {
@@ -12,24 +14,45 @@ interface Expense {
   description: string;
 }
 
+interface Weather {
+  temperature: number;
+  description: string;
+  icon: string;
+}
+
+interface Trip {
+  id: number;
+  fromLocation: string;
+  toLocation: string;
+  startDate: string;
+  endDate: string;
+  fromWeather: Weather;
+  toWeather: Weather;
+  expenses: Expense[];
+}
+
 const App: React.FC = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState<number | null>(null);
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [selectedTripId, setSelectedTripId] = useState<number | null>(null);
 
   const fetchExpenses = () => {
     axios.get('http://localhost:8000/api/expenses/').then((response) => {
-      const data = response.data.map((expense: any) => ({
+      const data = response.data.map((expense: Expense) => ({
         ...expense,
-        amount: parseFloat(expense.amount),
+        amount: parseFloat(expense.amount.toString()),
       }));
       setExpenses(data);
     });
   };
 
-  useEffect(() => {
-    fetchExpenses();
-  }, []);
+  const fetchTrips = () => {
+    axios.get('http://localhost:8000/api/trips/').then((response) => {
+      setTrips(response.data);
+    });
+  };
 
   const openModal = (id: number) => {
     setExpenseToDelete(id);
@@ -52,16 +75,26 @@ const App: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    fetchTrips();
+  }, []);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [selectedTripId]);
+
   return (
     <div className='container'>
       <div className='content'>
         <h1>BizTrip Expenses Tracker</h1>
-        <ExpenseForm fetchExpenses={fetchExpenses} />
-        <ExpenseList
-          expenses={expenses}
-          fetchExpenses={fetchExpenses}
-          onDelete={openModal}
+        <TripSelector
+          trips={trips}
+          selectedTripId={selectedTripId}
+          onSelectTrip={setSelectedTripId}
         />
+        <TripForm fetchTrips={fetchTrips} />
+        {selectedTripId && <ExpenseForm fetchExpenses={fetchExpenses} />}
+        <ExpenseList expenses={expenses} onDelete={openModal} />
         <Modal
           isOpen={isModalOpen}
           onClose={closeModal}

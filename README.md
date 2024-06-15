@@ -8,6 +8,7 @@
 
 ## **Table of Contents**
 
+- [TODO](#todo)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
@@ -20,8 +21,21 @@
 
 ---
 
+# **TODO**
+
+- [ ] Frontend: Create individual cards for 'TripForm' and 'ExpenseForm' to render sequentially
+- [ ] Feature: Add an upload button on each expense in the ExpenseList to upload receipts (save receipts to a directory Receipts/{TripList}).
+- [ ] Feature - convert uploaded images to PDF.
+- [ ] Feature: Implement a Download/Export button to allow users to download the expense list as a .csv file along with a nested folder containing PDFs of the receipts.
+- [ ] Feature - Add Authentication and the appropriate storage account per user
+- [ ] Feature: Create a monorepo and build the application in React-Native for cross-platform mobile support.
+- [ ] Feature - Add a subscription tier or ads for monetization
+- [ ] Profit
+
 ## **Features**
 
+- Use Google API to autofill start and end desitination
+- Gather geocoding from Google API to pass data to Visual Crossing Historical Weather API to see how the weather was on the trip
 - Submit business trip expenses with categories and amounts.
 - View a list of all expenses.
 - Calculate and display total expenses.
@@ -122,7 +136,6 @@ Update an existing expense by ID.
 **Request:**
 
 ```json
-Copy code
 {
   "category": "Meals",
   "amount": "420.00",
@@ -133,7 +146,6 @@ Copy code
 **Response:**
 
 ```json
-Copy code
 {
   "id": 2,
   "category": "Meals",

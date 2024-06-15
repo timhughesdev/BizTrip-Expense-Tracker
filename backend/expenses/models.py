@@ -13,3 +13,15 @@ class Expense(models.Model):
 
     def __str__(self):
         return f"{self.category}: {self.amount}"
+
+class Trip(models.Model):
+    fromLocation = models.CharField(max_length=100)
+    toLocation = models.CharField(max_length=100)
+    startDate = models.DateField()
+    endDate = models.DateField()
+    fromWeather = models.JSONField()
+    toWeather = models.JSONField()
+    expenses = models.ManyToManyField(Expense, related_name='trips')
+
+    def __str__(self):
+        return f"{self.fromLocation} to {self.toLocation} ({self.startDate} - {self.endDate})"
